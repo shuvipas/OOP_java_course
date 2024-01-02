@@ -3,19 +3,23 @@
 //    DRAW, X_WIN, Y_WIN
 //};
 
+import java.util.Scanner;
+
 enum GameStatus {
     DRAW, X_WIN, O_WIN, IN_PROGRESS
 };
 
 public class Board {
 
-    public static final int SIZE = 3;//5;
-    public static final int WIN_STREAK = 2;//3;
+    public static final int SIZE = 5;
+    public static final int WIN_STREAK = 5;
+
     private int spacesLeft = SIZE * SIZE;
     private Mark[][] board = new Mark[SIZE][SIZE];
     private Mark winner;// = Mark.BLANK;
 
     public Board() {
+
         winner = Mark.BLANK;
         for (int row = 0; row < SIZE; row++) {
             for (int col = 0; col < SIZE; col++) {
@@ -42,7 +46,7 @@ public class Board {
     }
 
     public boolean putMark(Mark mark, int row, int col) {
-        if (!onTheBoard(row, col) || board[row][col] != Mark.BLANK) {
+        if (!onTheBoard(row, col) || getMark(row, col) != Mark.BLANK) {
             return false;
         }
         board[row][col] = mark;
@@ -115,20 +119,21 @@ public class Board {
      * }
      */
 
-    public GameStatus getGameStatus(){// if i want this way of impolmanting
-       // Mark winner = getWinnerMark();
-        if(this.winner==Mark.BLANK){
-            return spacesLeft<=0? GameStatus.DRAW: GameStatus.IN_PROGRESS;
+    public GameStatus getGameStatus() {// if i want this way of impolmanting
+        // Mark winner = getWinnerMark();
+        if (this.winner == Mark.BLANK) {
+            return spacesLeft <= 0 ? GameStatus.DRAW : GameStatus.IN_PROGRESS;
         }
-        return winner == Mark.X? GameStatus.X_WIN: GameStatus.O_WIN;
+        return winner == Mark.X ? GameStatus.X_WIN : GameStatus.O_WIN;
     }
-        /*    public Winner getWinner(){
-        Mark winner = getWinnerMark();
-        if(winner==Mark.BLANK&&spacesLeft<=0){
-            return Winner.DRAW;
-        }
-
-    }
+    /*
+     * public Winner getWinner(){
+     * Mark winner = getWinnerMark();
+     * if(winner==Mark.BLANK&&spacesLeft<=0){
+     * return Winner.DRAW;
+     * }
+     * 
+     * }
      */
 
 }

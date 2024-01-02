@@ -1,12 +1,15 @@
 //import java.util.*;
 
+// commend to run the program:
+//java Tournament 2 none clever whatever
+
 public class Tournament {
     private final int rounds;
     private final Renderer renderer;
     private final Player player1;
     private final Player player2;
-    private static final String RESULTS_MESSAGE = "Game stats\nPlayer 1, %s won: %d rounds\n" +
-            "Player 2, %s won: %d rounds\nDraws: %d\n";
+    private static final String RESULTS_MESSAGE = "---Game stats---\n%s (player 1)  won %d rounds.\n" +
+            "%s (player 2)  won %d rounds.\nDraws (both lost) %d\n";
 
     public static void main(String[] args) {
         if (args.length != 4) {
@@ -34,6 +37,9 @@ public class Tournament {
 
         PlayerFactory playerFactory = new PlayerFactory();
         Player[] players = { playerFactory.buildPlayer(strPlayer1), playerFactory.buildPlayer(strPlayer2) };
+        if(renderer==null||players[0]==null||players[1]==null){
+            return;
+        }
 
         Tournament tournament = new Tournament(roundCount, renderer, players[0], players[1]);
         System.out.println("start game:");
@@ -41,8 +47,11 @@ public class Tournament {
         int[] tournamentStats = tournament.playTournament();
         System.out.printf(RESULTS_MESSAGE,
                 strPlayer1, tournamentStats[0],
-                strPlayer1, tournamentStats[1],
+                strPlayer2, tournamentStats[1],
                 tournamentStats[2]);
+
+        double percantegeWinning = ((double) tournamentStats[0])/  roundCount;
+        System.out.printf("win rate p1 (1/rounds): %.2f%%\n",percantegeWinning);
 
     }
 
@@ -60,16 +69,18 @@ public class Tournament {
         Player[] players = { player1, player2 };
         int isEven = 1; // 1 when i is even
         for (int i = 0; i < rounds; i++) {
-            System.out.println("new round");
+            if (renderer instanceof ConsoleRenderer) {
+                System.out.println("new round");
+            }
+
             Game newGame = new Game(players[i % 2], players[isEven], renderer);
-            isEven ^= 1;
             Mark winner = newGame.run();
             switch (winner) {
                 case X:
-                    gameStats[0]++;
+                    gameStats[i % 2]++;
                     break;
                 case O:
-                    gameStats[1]++;
+                    gameStats[isEven]++;
                     break;
                 case BLANK:
                     gameStats[2]++;
@@ -78,6 +89,7 @@ public class Tournament {
                 default:
                     continue;
             }
+            isEven ^= 1;
         }
         return gameStats;
     }

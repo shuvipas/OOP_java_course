@@ -8,7 +8,8 @@ public class RendererFactory {
             case NO_RENDERER:
                 return new VoidRenderer();
             default:
-                    return new VoidRenderer();
+            System.out.printf("ERROR: bad renderer argumant there is no '%s' \n", rendereString);
+            return null;
         }
     }
 }

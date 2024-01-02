@@ -6,6 +6,7 @@ public class HumanPlayer implements Player {
     public HumanPlayer() {
         scanner = new Scanner(System.in);
     }
+
     @Override
     public void playTurn(Board board, Mark mark) {
         
@@ -19,7 +20,7 @@ public class HumanPlayer implements Player {
                     int col = num % 10 - 1;
                     inputSuccess = board.putMark(mark, row, col);
                     if (!inputSuccess) {
-                        System.out.println("Invalid input. Please enter a valid integer.");
+                        System.out.println("Invalid input. Please enter a valid integer and place.");
                         scanner.nextLine();
                     }
                 } else {
